@@ -1,3 +1,5 @@
+
+## 라이브러리 구조
 lib/
 ├── main.dart
 ├── models/
@@ -6,7 +8,9 @@ lib/
 ├── services/   ← (저장소, 데이터 처리)
 └── utils/      ← (공통 함수, 날짜 처리 등)
 
+---
 
+## 라이브러리 별 기능
 ### 📱 screens/
 
 * `HomeScreen` – 오늘의 포커스와 할일 목록
@@ -16,7 +20,6 @@ lib/
 
 > **Tip:** 라우팅은 `go_router` 써도 좋아요. 유지보수가 훨씬 편해짐.
 
----
 
 ### 📦 models/
 
@@ -24,14 +27,12 @@ lib/
 * `category_model.dart`: 태스크 카테고리 (예: Work, Personal)
 * `user_preferences.dart`: 설정 데이터 저장용
 
----
 
 ### 🧱 widgets/
 
 * `TaskItem`, `TaskList`, `CalendarDay`, `SectionTitle`, `CustomDialog` 등 UI 구성 재사용 가능 컴포넌트
 * 스크롤 가능한 달력, 주간 뷰 등도 위젯화
 
----
 
 ### 🛠 services/
 
@@ -40,7 +41,6 @@ lib/
 * `notification_service.dart`: 하루 시작 알림 등 푸시
 * `theme_service.dart`: 다크모드, 테마 상태 저장
 
----
 
 ### 🧮 utils/
 
@@ -48,9 +48,8 @@ lib/
 * `id_generator.dart`: task 고유 ID 부여
 * `extensions.dart`: String이나 DateTime에 대한 extension methods
 
----
 
-## 💡 넣으면 좋은 기능 아이디어
+## 추가 아이디어
 
 | 기능                       | 이유                         |
 | ------------------------ | -------------------------- |
@@ -64,15 +63,10 @@ lib/
 
 ---
 
-현명한 질문이에요! 무작정 기능 때려넣기보다, \*\*앱의 목적에 맞는 MVP(Minimum Viable Product)\*\*부터 만드는 게 진짜 실용적이에요.
 
----
+## 🎯 앱 목적 정리
 
-## 🎯 앱 목적 다시 정리
-
-> **"오늘의 목표를 설정하고 태스크를 정리해 나가는 앱"**
-
-그렇다면 핵심 기능은:
+핵심 기능은:
 
 1. **오늘 할 일 추가 및 체크**
 2. **간단한 날짜 선택(또는 오늘로 고정)**
@@ -134,9 +128,5 @@ lib/
 원하면 여기서 바로 시작할 수 있도록:
 
 * `Task` 모델
-* `TaskService` (SharedPreferences 기반)
+* `TaskService` (Hive 기반)
 * 간단한 `TaskListView` 위젯
-  셋 다 만들어 줄게요.
-
-👉 시작할까요? Hive로 할지, SharedPreferences로 할지도 알려줘요.
-
