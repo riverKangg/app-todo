@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:todo/providers/task_provider.dart';
 
 class WeeklyCalendar extends StatefulWidget {
-  WeeklyCalendar({super.key});
+  final DateTime selectedDate;
+  final ValueChanged<DateTime> onDateSelected;
+
+  const WeeklyCalendar({
+    Key? key,
+    required this.selectedDate,
+    required this.onDateSelected,
+  }) : super(key: key);
 
   @override
   State<WeeklyCalendar> createState() => _WeeklyCalendarState();
@@ -34,13 +43,9 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
     });
   }
 
-  // 주차 계산 함수
   String getSmartMonthLabel(DateTime startOfWeek) {
     final today = DateTime.now();
-    final weekDates = List.generate(
-      7,
-      (i) => startOfWeek.add(Duration(days: i)),
-    );
+    final weekDates = getWeekDates(startOfWeek);
 
     final isTodayInWeek = weekDates.any(
       (date) =>
@@ -53,7 +58,6 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
       return '${today.year}년 ${today.month}월';
     }
 
-    // 과반수 월 계산
     final Map<int, int> monthCounts = {};
     for (var date in weekDates) {
       monthCounts.update(date.month, (count) => count + 1, ifAbsent: () => 1);
@@ -67,31 +71,29 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
+    final provider = Provider.of<TaskProvider>(context);
+    final selectedDate = provider.selectedDate;
     final weekDates = getWeekDates(_startOfWeek);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
               getSmartMonthLabel(_startOfWeek),
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-
             ElevatedButton.icon(
               onPressed: _goToPreviousWeek,
               icon: const Icon(Icons.arrow_back_ios),
-              label: Text(""),
+              label: const Text(""),
             ),
-
             ElevatedButton.icon(
               onPressed: _goToNextWeek,
               icon: const Icon(Icons.arrow_forward_ios),
-              label: Text(""),
+              label: const Text(""),
             ),
           ],
         ),
@@ -100,30 +102,41 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children:
               weekDates.map((date) {
-                final isToday = DateUtils.isSameDay(date, today);
+                final isSelected = DateUtils.isSameDay(date, selectedDate);
 
-                return Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: isToday ? Colors.grey[200] : Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+                return ElevatedButton(
+                  onPressed: () {
+                    provider.updateSelectedDate(date);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        isSelected ? Colors.deepPurple : Colors.white,
+                    foregroundColor: isSelected ? Colors.white : Colors.black,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 12,
+                    ),
                   ),
                   child: Column(
                     children: [
                       Text(
-                        DateFormat.E().format(date), // 요일
+                        DateFormat.E().format(date),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: isToday ? Colors.deepPurple : Colors.black,
+                          color: isSelected ? Colors.white : Colors.black,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        date.day.toString(), // 날짜
+                        date.day.toString(),
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: isToday ? Colors.deepPurple : Colors.black,
+                          color: isSelected ? Colors.white : Colors.black,
                         ),
                       ),
                     ],
@@ -132,8 +145,6 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
               }).toList(),
         ),
         const SizedBox(height: 16),
-
-        // 이전 주, 다음 주 버튼
       ],
     );
   }

@@ -1,12 +1,27 @@
 
 ## 라이브러리 구조
-lib/
-├── main.dart
-├── models/
-├── screens/
-├── widgets/
-├── services/   ← (저장소, 데이터 처리)
-└── utils/      ← (공통 함수, 날짜 처리 등)
+lib/  
+├── main.dart  
+├── models/  
+│   └── task.dart  
+├── providers/  
+│   └── task_provider.dart  
+├── screens/  
+├── widgets/  
+│   ├── weekly_calendar.dart  
+│   ├── user_info.dart  
+│   ├── task_item.dart  
+│   ├── task_list_section.dart  
+│   └── add_task_dialog.dart  
+├── services/  
+└── utils/  
+
+- models/: 데이터 모델 정의
+- providers/: 상태 관리 로직
+- screens/: 주요 화면 위젯
+- widgets/: 재사용 가능한 UI 컴포넌트
+
+
 
 ---
 
