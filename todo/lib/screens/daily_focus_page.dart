@@ -6,6 +6,7 @@ import '../widgets/user_info.dart';
 import '../widgets/weekly_calendar.dart';
 import '../widgets/task_list_section.dart';
 import '../widgets/add_task_dialog.dart';
+import '../widgets/add_goal_dialog.dart';
 
 class DailyFocusPage extends StatelessWidget {
   // final DateTime selectedDate;
@@ -41,6 +42,18 @@ class DailyFocusPage extends StatelessWidget {
                   'Tasks',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                DropdownButton<String>(
+                  value: taskProvider.selectedGoal,
+                  items:
+                      taskProvider.goals
+                          .map(
+                            (g) => DropdownMenuItem(child: Text(g), value: g),
+                          )
+                          .toList(),
+                  onChanged: (val) {
+                    if (val != null) taskProvider.selectGoal(val);
+                  },
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepPurple[300],
@@ -51,7 +64,7 @@ class DailyFocusPage extends StatelessWidget {
                   onPressed:
                       () => showDialog(
                         context: context,
-                        builder: (context) => AddTaskDialog(),
+                        builder: (context) => AddGoalDialog(),
                       ),
                   child: Text('+ Add Goal'),
                 ),

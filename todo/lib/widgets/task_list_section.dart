@@ -23,8 +23,9 @@ class TaskListSection extends StatelessWidget {
           (entry) => TaskItem(
             title: entry.value.title,
             isDone: entry.value.isDone,
-            onChanged: (_) => taskProvider.toggleTaskCompletion(entry.key),
+            onChanged: (_) => taskProvider.toggleTaskCompletion(entry.value),
             date: entry.value.date,
+            onDelete: () => taskProvider.deleteTask(entry.value),
           ),
         ),
       ],

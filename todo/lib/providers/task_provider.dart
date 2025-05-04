@@ -6,29 +6,58 @@ import '../models/task.dart';
 
 class TaskProvider extends ChangeNotifier {
   final Box<Task> taskBox = Hive.box<Task>('tasks');
-  DateTime _selectedDate = DateTime.now();
 
+  DateTime _selectedDate = DateTime.now();
   DateTime get selectedDate => _selectedDate;
+
+  final Set<String> _goals = {'Work'};
+  String _selectedGoal = 'Work';
+  Set<String> get goals => _goals;
+  String get selectedGoal => _selectedGoal;
 
   List<Task> get taskForSelectedDate =>
       taskBox.values
-          .where((task) => isSameDay(task.date, _selectedDate))
+          .where(
+            (task) =>
+                task.goal == _selectedGoal &&
+                isSameDay(task.date, _selectedDate),
+          )
           .toList();
+
+  void addGoal(String goalName) {
+    _goals.add(goalName);
+    notifyListeners();
+  }
+
+  void selectGoal(String goalName) {
+    _selectedGoal = goalName;
+    notifyListeners();
+  }
 
   void addTask(String title) {
     if (title.trim().isEmpty) return;
-    final newTask = Task(title: title, isDone: false, date: _selectedDate);
+    final newTask = Task(
+      title: title,
+      isDone: false,
+      date: _selectedDate,
+      goal: _selectedGoal,
+    );
     taskBox.add(newTask);
     notifyListeners();
   }
 
-  void toggleTaskCompletion(int index) {
-    final task = taskBox.getAt(index);
-    if (task != null) {
-      task.isDone = !task.isDone;
-      task.save();
-      notifyListeners();
-    }
+  void deleteTask(Task task) {
+    task.delete();
+    notifyListeners();
+  }
+
+  void toggleTaskCompletion(Task task) {
+    // final task = taskBox.getAt(index);
+    // if (task != null) {
+    task.isDone = !task.isDone;
+    task.save();
+    notifyListeners();
+    // }
   }
 
   void updateSelectedDate(DateTime date) {

@@ -13,7 +13,15 @@ class Task extends HiveObject {
   @HiveField(2)
   DateTime date;
 
-  Task({required this.title, this.isDone = false, required this.date});
+  @HiveField(3)
+  String? goal;
+
+  Task({
+    required this.title,
+    this.isDone = false,
+    required this.date,
+    required this.goal,
+  });
 }
 
 //flutter packages pub run build_runner build

@@ -10,9 +10,11 @@ import 'screens/daily_focus_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
+
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(TaskAdapter());
   await Hive.openBox<Task>('tasks');
+  
   runApp(DailyFocusApp());
 }
 
