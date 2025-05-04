@@ -95,6 +95,19 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
               icon: const Icon(Icons.arrow_forward_ios),
               label: const Text(""),
             ),
+            ElevatedButton.icon(
+              onPressed: () {
+                final today = DateTime.now();
+                setState(() {
+                  _startOfWeek = today.subtract(
+                    Duration(days: today.weekday % 7),
+                  );
+                });
+                provider.updateSelectedDate(today);
+              },
+              icon: Icon(Icons.today),
+              label: const Text("Today"),
+            ),
           ],
         ),
         const SizedBox(height: 16),
