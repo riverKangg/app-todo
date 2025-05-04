@@ -10,7 +10,7 @@ class UserInfo extends StatelessWidget {
         const SizedBox(width: 10),
         CircleAvatar(
           radius: 30,
-          backgroundImage: AssetImage("assets/kingbob.webp"),
+          backgroundImage: AssetImage('assets/kingbob.webp'),
         ),
         const SizedBox(width: 15),
         Column(
