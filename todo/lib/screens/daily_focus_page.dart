@@ -10,9 +10,6 @@ import '../widgets/add_goal_dialog.dart';
 class DailyFocusPage extends StatelessWidget {
   const DailyFocusPage({super.key});
 
-  // final DateTime selectedDate;
-  // const DailyFocusPage({super.key, required this.selectedDate});
-
   @override
   Widget build(BuildContext context) {
     final taskProvider = Provider.of<TaskProvider>(context);

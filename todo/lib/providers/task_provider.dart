@@ -6,14 +6,19 @@ import '../models/task.dart';
 
 class TaskProvider extends ChangeNotifier {
   final Box<Task> taskBox = Hive.box<Task>('tasks');
+  final Box<String> goalBox = Hive.box<String>('goals');
 
   DateTime _selectedDate = DateTime.now();
   DateTime get selectedDate => _selectedDate;
 
-  final Set<String> _goals = {'Work'};
+  final Set<String> _goals = {};
   String _selectedGoal = 'Work';
   Set<String> get goals => _goals;
   String get selectedGoal => _selectedGoal;
+
+  TaskProvider() {
+    loadGoals();
+  }
 
   List<Task> get taskForSelectedDate =>
       taskBox.values
@@ -32,8 +37,21 @@ class TaskProvider extends ChangeNotifier {
         .toList();
   }
 
+  void loadGoals() {
+    final storedGoals = goalBox.values.toSet();
+    _goals.clear();
+    _goals.addAll(storedGoals);
+    if (_goals.isNotEmpty) {
+      _selectedGoal = _goals.first;
+    }
+    notifyListeners();
+  }
+
   void addGoal(String goalName) {
+    if (_goals.contains(goalName)) return;
+
     _goals.add(goalName);
+    goalBox.add(goalName);
     notifyListeners();
   }
 
