@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../providers/task_provider.dart';
 import '../widgets/user_info.dart';
 import '../widgets/weekly_calendar.dart';
-import '../widgets/task_list_section.dart';
 import '../widgets/add_task_dialog.dart';
 import '../widgets/add_goal_dialog.dart';
 
