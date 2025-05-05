@@ -62,11 +62,23 @@ class DailyFocusPage extends StatelessWidget {
                   //goal에 속한 task 리스트
                   ...tasks.map(
                     (task) => ListTile(
-                      title: Text(task.title),
-                      trailing: Checkbox(
+                      leading: Checkbox(
                         value: task.isDone,
                         onChanged:
                             (value) => taskProvider.toggleTaskCompletion(task),
+                      ),
+                      title: Text(
+                        task.title,
+                        style: TextStyle(
+                          decoration:
+                              task.isDone
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                        ),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () => taskProvider.deleteTask(task),
+                        icon: Icon(Icons.delete),
                       ),
                     ),
                   ),
