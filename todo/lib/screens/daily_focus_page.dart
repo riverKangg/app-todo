@@ -109,54 +109,6 @@ class DailyFocusPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text(
-            //       'Tasks',
-            //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            //     ),
-            //     DropdownButton<String>(
-            //       value: taskProvider.selectedGoal,
-            //       items:
-            //           taskProvider.goals
-            //               .map(
-            //                 (g) => DropdownMenuItem(child: Text(g), value: g),
-            //               )
-            //               .toList(),
-            //       onChanged: (val) {
-            //         if (val != null) taskProvider.selectGoal(val);
-            //       },
-            //     ),
-            //     ElevatedButton(
-            //       style: ElevatedButton.styleFrom(
-            //         backgroundColor: Colors.deepPurple[300],
-            //         shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(12),
-            //         ),
-            //       ),
-            //       onPressed:
-            //           () => showDialog(
-            //             context: context,
-            //             builder: (context) => AddGoalDialog(),
-            //           ),
-            //       child: Text('+ Add Goal'),
-            //     ),
-            //   ],
-            // ),
-            // const SizedBox(height: 24),
-            // TaskListSection(),
-            // const SizedBox(height: 8),
-            // TextButton.icon(
-            //   onPressed:
-            //       () => showDialog(
-            //         context: context,
-            //         builder: (context) => AddTaskDialog(),
-            //       ),
-            //   icon: Icon(Icons.add),
-            //   label: Text('Add task'),
-            // ),
           ],
         ),
       ),
