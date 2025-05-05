@@ -24,39 +24,43 @@ class _TaskInputFieldState extends State<TaskInputField> {
   Widget build(BuildContext context) {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 8, bottom: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _controller,
-              decoration: const InputDecoration(
-                hintText: 'Add a new task...',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12),
-              ),
-              onSubmitted: (text) {
-                final trimmed = text.trim();
-                if (trimmed.isNotEmpty) {
-                  taskProvider.addTask(trimmed, widget.goal);
-                  _controller.clear();
-                }
-              },
-            ),
-          ),
-          const SizedBox(width: 8),
-          ElevatedButton(
-            onPressed: () {
-              final text = _controller.text.trim();
-              if (text.isNotEmpty) {
-                taskProvider.addTask(text, widget.goal);
-                _controller.clear();
-              }
-            },
-            child: const Text('추가'),
-          ),
-        ],
+    return ListTile(
+      contentPadding: const EdgeInsets.only(left: 16, right: 8),
+      leading: Checkbox(value: false, onChanged: null),
+      title: TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          hintText: '할 일을 입력하세요...',
+          hintStyle: TextStyle(color: Colors.grey[500]),
+          border: InputBorder.none,
+          isDense: true,
+        ),
+        style: const TextStyle(fontSize: 16),
+        onSubmitted: (text) {
+          final trimmed = text.trim();
+          if (trimmed.isNotEmpty) {
+            taskProvider.addTask(trimmed, widget.goal);
+            _controller.clear();
+          }
+        },
+      ),
+      trailing: OutlinedButton(
+        onPressed: () {
+          final text = _controller.text.trim();
+          if (text.isNotEmpty) {
+            taskProvider.addTask(text, widget.goal);
+            _controller.clear();
+          }
+        },
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: Colors.grey[400]!),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        ),
+        child: const Text(
+          '추가',
+          style: TextStyle(fontSize: 14, color: Colors.black87),
+        ),
       ),
     );
   }
