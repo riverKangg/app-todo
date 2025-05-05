@@ -13,9 +13,13 @@ void main() async {
 
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(TaskAdapter());
+  // // 먼저 박스를 열고
+  // var tasksBox = await Hive.openBox<Task>('tasks');
 
-  // await Hive.openBox<Task>('tasks');
-  // await Hive.deleteBoxFromDisk('goals');
+  // // 비우고, 닫고, 디스크에서 삭제
+  // await tasksBox.clear();
+  // await tasksBox.close();
+  // await Hive.deleteBoxFromDisk('tasks');
 
   await Hive.openBox<Task>('tasks');
   await Hive.openBox<String>('goals');
