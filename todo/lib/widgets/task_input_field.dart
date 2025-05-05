@@ -36,6 +36,13 @@ class _TaskInputFieldState extends State<TaskInputField> {
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(horizontal: 12),
               ),
+              onSubmitted: (text) {
+                final trimmed = text.trim();
+                if (trimmed.isNotEmpty) {
+                  taskProvider.addTask(trimmed, widget.goal);
+                  _controller.clear();
+                }
+              },
             ),
           ),
           const SizedBox(width: 8),
