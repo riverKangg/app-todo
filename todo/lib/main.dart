@@ -13,6 +13,10 @@ void main() async {
 
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(TaskAdapter());
+
+  // await Hive.openBox<Task>('tasks');
+  // await Hive.deleteBoxFromDisk('goals');
+
   await Hive.openBox<Task>('tasks');
   await Hive.openBox<String>('goals');
 
