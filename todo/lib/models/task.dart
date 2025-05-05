@@ -16,11 +16,15 @@ class Task extends HiveObject {
   @HiveField(3)
   String goal;
 
+  @HiveField(4)
+  String? memo;
+
   Task({
     required this.title,
     this.isDone = false,
     required this.date,
     required this.goal,
+    this.memo = '',
   });
 }
 

@@ -19,7 +19,7 @@ class AddTaskDialog extends StatelessWidget {
         autofocus: true,
         decoration: InputDecoration(hintText: 'Enter task title'),
         onSubmitted: (value) {
-          taskProvider.addTaskWithGoal(value, goal);
+          taskProvider.addTask(value, goal);
           Navigator.pop(context);
         },
       ),
@@ -33,7 +33,7 @@ class AddTaskDialog extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            taskProvider.addTaskWithGoal(_taskController.text, goal);
+            taskProvider.addTask(_taskController.text, goal);
             Navigator.pop(context);
           },
           child: Text('Add'),

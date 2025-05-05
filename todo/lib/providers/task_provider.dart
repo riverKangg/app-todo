@@ -9,10 +9,11 @@ class TaskProvider extends ChangeNotifier {
   final Box<String> goalBox = Hive.box<String>('goals');
 
   DateTime _selectedDate = DateTime.now();
-  DateTime get selectedDate => _selectedDate;
-
   final Set<String> _goals = {};
   String _selectedGoal = 'Work';
+
+  // Getters
+  DateTime get selectedDate => _selectedDate;
   Set<String> get goals => _goals;
   String get selectedGoal => _selectedGoal;
 
@@ -20,6 +21,7 @@ class TaskProvider extends ChangeNotifier {
     loadGoals();
   }
 
+  // 현재 선택된 날짜 + 목표(goal)에 해당하는 Task 리스트
   List<Task> get taskForSelectedDate =>
       taskBox.values
           .where(
@@ -29,6 +31,7 @@ class TaskProvider extends ChangeNotifier {
           )
           .toList();
 
+  // 특정 목표의 Task 리스트(선택된 날짜 기준)
   List<Task> getTaskByGoal(String goal) {
     return taskBox.values
         .where(
@@ -37,6 +40,7 @@ class TaskProvider extends ChangeNotifier {
         .toList();
   }
 
+  // 날짜별 목표별 통계: 총 task 수/완료된 수
   Map<String, (int total, int done)> getGoalStatsByDate(DateTime date) {
     final Map<String, (int, int)> stats = {};
     for (var task in taskBox.values) {
@@ -51,6 +55,7 @@ class TaskProvider extends ChangeNotifier {
     return stats;
   }
 
+  // 선택된 날짜 기준 완료/전체 task 갯수
   Map<String, int> getTaskStatsForDate(DateTime date) {
     final tasks =
         taskBox.values.where((task) => isSameDay(task.date, date)).toList();
@@ -81,13 +86,15 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTaskWithGoal(String title, String goal) {
+  // task 추가 (goal + memo 포함)
+  void addTask(String title, String goal, {String memo = ""}) {
     if (title.trim().isEmpty) return;
     final newTask = Task(
       title: title,
       isDone: false,
       date: _selectedDate,
       goal: goal,
+      memo: memo,
     );
     taskBox.add(newTask);
     notifyListeners();
@@ -98,15 +105,22 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Task 완료 여부 토글
   void toggleTaskCompletion(Task task) {
-    // final task = taskBox.getAt(index);
-    // if (task != null) {
     task.isDone = !task.isDone;
     task.save();
     notifyListeners();
     // }
   }
 
+  /// 메모 업데이트
+  void updateTaskMemo(Task task, String newMemo) {
+    task.memo = newMemo;
+    task.save();
+    notifyListeners();
+  }
+
+  /// 선택 날짜 변경
   void updateSelectedDate(DateTime date) {
     _selectedDate = date;
     notifyListeners();

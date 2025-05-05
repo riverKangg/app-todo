@@ -1,6 +1,6 @@
 // lib/screens/daily_focus_page.dart
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../providers/task_provider.dart';
 import '../widgets/user_info.dart';
@@ -14,9 +14,9 @@ class DailyFocusPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final taskProvider = Provider.of<TaskProvider>(context);
-    final goalStats = taskProvider.getGoalStatsByDate(
-      taskProvider.selectedDate,
-    );
+    // final goalStats = taskProvider.getGoalStatsByDate(
+    //   taskProvider.selectedDate,
+    // );
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -37,17 +37,17 @@ class DailyFocusPage extends StatelessWidget {
               selectedDate: taskProvider.selectedDate,
               onDateSelected: (date) => taskProvider.updateSelectedDate(date),
             ),
-            const SizedBox(height: 20),
-            Text(
-              '${DateFormat('M월 d일').format(taskProvider.selectedDate)} Task 통계',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            ...goalStats.entries.map((entry) {
-              final goal = entry.key;
-              final (total, done) = entry.value;
-              return Text(' $goal:$done / $total 완료');
-            }),
+            // const SizedBox(height: 20),
 
+            // Text(
+            //   '${DateFormat('M월 d일').format(taskProvider.selectedDate)} Task 통계',
+            //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            // ),
+            // ...goalStats.entries.map((entry) {
+            //   final goal = entry.key;
+            //   final (total, done) = entry.value;
+            //   return Text(' $goal:$done / $total 완료');
+            // }),
             const SizedBox(height: 40),
 
             // Goal 별 Task 관리
