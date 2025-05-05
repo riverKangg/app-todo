@@ -117,6 +117,10 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
               weekDates.map((date) {
                 final isSelected = DateUtils.isSameDay(date, selectedDate);
 
+                final stats = provider.getTaskStatsForDate(date);
+                final done = stats['done'] ?? 0;
+                final total = stats['total'] ?? 0;
+
                 return ElevatedButton(
                   onPressed: () {
                     provider.updateSelectedDate(date);
@@ -150,6 +154,14 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: isSelected ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '✅$done/📌$total',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: isSelected ? Colors.white : Colors.grey[700],
                         ),
                       ),
                     ],
