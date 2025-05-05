@@ -34,7 +34,7 @@ class AddGoalDialog extends StatelessWidget {
     if (text.isNotEmpty) {
       final provider = Provider.of<TaskProvider>(context, listen: false);
       provider.addGoal(text);
-      provider.selectGoal(text); // 새로 추가한 goal 선택 상태로 만들기
+      provider.selectGoal(text);
       Navigator.pop(context);
     }
   }

@@ -24,6 +24,14 @@ class TaskProvider extends ChangeNotifier {
           )
           .toList();
 
+  List<Task> getTaskByGoal(String goal) {
+    return taskBox.values
+        .where(
+          (task) => task.goal == goal && isSameDay(task.date, _selectedDate),
+        )
+        .toList();
+  }
+
   void addGoal(String goalName) {
     _goals.add(goalName);
     notifyListeners();
@@ -34,13 +42,13 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTask(String title) {
+  void addTaskWithGoal(String title, String goal) {
     if (title.trim().isEmpty) return;
     final newTask = Task(
       title: title,
       isDone: false,
       date: _selectedDate,
-      goal: _selectedGoal,
+      goal: goal,
     );
     taskBox.add(newTask);
     notifyListeners();

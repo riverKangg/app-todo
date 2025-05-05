@@ -26,6 +26,7 @@ class DailyFocusPage extends StatelessWidget {
         alignment: Alignment.topCenter,
         margin: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
+          padding: const EdgeInsets.all(16),
           children: [
             const SizedBox(height: 10),
             UserInfo(),
@@ -35,53 +36,127 @@ class DailyFocusPage extends StatelessWidget {
               onDateSelected: (date) => taskProvider.updateSelectedDate(date),
             ),
             const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Tasks',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                DropdownButton<String>(
-                  value: taskProvider.selectedGoal,
-                  items:
-                      taskProvider.goals
-                          .map(
-                            (g) => DropdownMenuItem(child: Text(g), value: g),
-                          )
-                          .toList(),
-                  onChanged: (val) {
-                    if (val != null) taskProvider.selectGoal(val);
-                  },
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple[300],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+            // Goal 별 Task 관리
+            ...taskProvider.goals.map((goal) {
+              final tasks = taskProvider.getTaskByGoal(goal);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    margin: const EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple[100],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      goal,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  onPressed:
-                      () => showDialog(
-                        context: context,
-                        builder: (context) => AddGoalDialog(),
+
+                  //goal에 속한 task 리스트
+                  ...tasks.map(
+                    (task) => ListTile(
+                      title: Text(task.title),
+                      trailing: Checkbox(
+                        value: task.isDone,
+                        onChanged:
+                            (value) => taskProvider.toggleTaskCompletion(task),
                       ),
-                  child: Text('+ Add Goal'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            TaskListSection(),
-            const SizedBox(height: 8),
-            TextButton.icon(
-              onPressed:
-                  () => showDialog(
-                    context: context,
-                    builder: (context) => AddTaskDialog(),
+                    ),
                   ),
-              icon: Icon(Icons.add),
-              label: Text('Add task'),
+
+                  // task 추가 버튼
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
+                      onPressed:
+                          () => showDialog(
+                            context: context,
+                            builder: (context) => AddTaskDialog(goal: goal),
+                          ),
+                      icon: Icon(Icons.add),
+                      label: Text('Add task to "$goal"'),
+                    ),
+                  ),
+                  const Divider(thickness: 1, height: 32),
+                ],
+              );
+            }),
+
+            // Goal 추가 버튼
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple[300],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed:
+                    () => showDialog(
+                      context: context,
+                      builder: (context) => AddGoalDialog(),
+                    ),
+                child: Text('+Add Goal'),
+              ),
             ),
+            const SizedBox(height: 20),
+
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Text(
+            //       'Tasks',
+            //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            //     ),
+            //     DropdownButton<String>(
+            //       value: taskProvider.selectedGoal,
+            //       items:
+            //           taskProvider.goals
+            //               .map(
+            //                 (g) => DropdownMenuItem(child: Text(g), value: g),
+            //               )
+            //               .toList(),
+            //       onChanged: (val) {
+            //         if (val != null) taskProvider.selectGoal(val);
+            //       },
+            //     ),
+            //     ElevatedButton(
+            //       style: ElevatedButton.styleFrom(
+            //         backgroundColor: Colors.deepPurple[300],
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(12),
+            //         ),
+            //       ),
+            //       onPressed:
+            //           () => showDialog(
+            //             context: context,
+            //             builder: (context) => AddGoalDialog(),
+            //           ),
+            //       child: Text('+ Add Goal'),
+            //     ),
+            //   ],
+            // ),
+            // const SizedBox(height: 24),
+            // TaskListSection(),
+            // const SizedBox(height: 8),
+            // TextButton.icon(
+            //   onPressed:
+            //       () => showDialog(
+            //         context: context,
+            //         builder: (context) => AddTaskDialog(),
+            //       ),
+            //   icon: Icon(Icons.add),
+            //   label: Text('Add task'),
+            // ),
           ],
         ),
       ),

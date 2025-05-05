@@ -14,10 +14,7 @@ class TaskListSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Work',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
+        Container(child: Text('🎯', style: TextStyle(fontSize: 23))),
         const SizedBox(height: 12),
         ...tasks.asMap().entries.map(
           (entry) => TaskItem(
