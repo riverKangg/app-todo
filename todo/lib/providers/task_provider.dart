@@ -37,6 +37,20 @@ class TaskProvider extends ChangeNotifier {
         .toList();
   }
 
+  Map<String, (int total, int done)> getGoalStatsByDate(DateTime date) {
+    final Map<String, (int, int)> stats = {};
+    for (var task in taskBox.values) {
+      if (isSameDay(task.date, date)) {
+        final key = task.goal;
+        stats[key] = (
+          (stats[key]?.$1 ?? 0) + 1,
+          (stats[key]?.$2 ?? 0) + (task.isDone ? 1 : 0),
+        );
+      }
+    }
+    return stats;
+  }
+
   void loadGoals() {
     final storedGoals = goalBox.values.toSet();
     _goals.clear();

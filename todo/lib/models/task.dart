@@ -14,7 +14,7 @@ class Task extends HiveObject {
   DateTime date;
 
   @HiveField(3)
-  String? goal;
+  String goal;
 
   Task({
     required this.title,
