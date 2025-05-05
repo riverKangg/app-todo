@@ -8,6 +8,8 @@ import '../widgets/add_task_dialog.dart';
 import '../widgets/add_goal_dialog.dart';
 
 class DailyFocusPage extends StatelessWidget {
+  const DailyFocusPage({super.key});
+
   // final DateTime selectedDate;
   // const DailyFocusPage({super.key, required this.selectedDate});
 

@@ -8,10 +8,10 @@ class WeeklyCalendar extends StatefulWidget {
   final ValueChanged<DateTime> onDateSelected;
 
   const WeeklyCalendar({
-    Key? key,
+    super.key,
     required this.selectedDate,
     required this.onDateSelected,
-  }) : super(key: key);
+  });
 
   @override
   State<WeeklyCalendar> createState() => _WeeklyCalendarState();
@@ -66,7 +66,7 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
         monthCounts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
     final year = weekDates.firstWhere((d) => d.month == dominantMonth).year;
 
-    return '$year년 ${dominantMonth}월';
+    return '$year년 $dominantMonth월';
   }
 
   @override

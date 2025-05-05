@@ -6,7 +6,7 @@ class AddTaskDialog extends StatelessWidget {
   final String goal;
   final TextEditingController _taskController = TextEditingController();
 
-  AddTaskDialog({Key? key, required this.goal}) : super(key: key);
+  AddTaskDialog({super.key, required this.goal});
 
   @override
   Widget build(BuildContext context) {
