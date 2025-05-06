@@ -71,31 +71,77 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
   }
 
   Widget _buildNavigationButtons(TaskProvider provider) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Text(
-          _getSmartMonthLabel(),
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        ElevatedButton.icon(
-          onPressed: () => _changeWeek(-7),
-          icon: const Icon(Icons.arrow_back_ios),
-          label: const SizedBox.shrink(),
-        ),
-        ElevatedButton.icon(
-          onPressed: () => _changeWeek(7),
-          icon: const Icon(Icons.arrow_forward_ios),
-          label: const SizedBox.shrink(),
-        ),
-        ElevatedButton.icon(
-          onPressed: () => _goToToday(provider),
-          icon: const Icon(Icons.today),
-          label: const Text("Today"),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 400;
+
+        final children = [
+          Text(
+            _getSmartMonthLabel(),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          ElevatedButton.icon(
+            onPressed: () => _changeWeek(-7),
+            icon: const Icon(Icons.arrow_back_ios),
+            label: const SizedBox.shrink(),
+          ),
+          ElevatedButton.icon(
+            onPressed: () => _changeWeek(7),
+            icon: const Icon(Icons.arrow_forward_ios),
+            label: const SizedBox.shrink(),
+          ),
+          ElevatedButton.icon(
+            onPressed: () => _goToToday(provider),
+            icon: const Icon(Icons.today),
+            label: const Text("Today"),
+          ),
+        ];
+
+        if (isNarrow) {
+          // 좁은 화면에서는 Wrap으로 줄바꿈
+          return Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 8,
+            children: children,
+          );
+        } else {
+          // 넓은 화면에서는 Row로 일렬 배치
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: children,
+          );
+        }
+      },
     );
   }
+
+  // Widget _buildNavigationButtons(TaskProvider provider) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //     children: [
+  //       Text(
+  //         _getSmartMonthLabel(),
+  //         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  //       ),
+  //       ElevatedButton.icon(
+  //         onPressed: () => _changeWeek(-7),
+  //         icon: const Icon(Icons.arrow_back_ios),
+  //         label: const SizedBox.shrink(),
+  //       ),
+  //       ElevatedButton.icon(
+  //         onPressed: () => _changeWeek(7),
+  //         icon: const Icon(Icons.arrow_forward_ios),
+  //         label: const SizedBox.shrink(),
+  //       ),
+  //       ElevatedButton.icon(
+  //         onPressed: () => _goToToday(provider),
+  //         icon: const Icon(Icons.today),
+  //         label: const Text("Today"),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildWeekDayButton(TaskProvider provider, DateTime date) {
     final isSelected = DateUtils.isSameDay(date, provider.selectedDate);
@@ -103,45 +149,82 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
     final done = stats['done'] ?? 0;
     final total = stats['total'] ?? 0;
 
-    return ElevatedButton(
-      onPressed: () => provider.updateSelectedDate(date),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.deepPurple : Colors.white,
-        foregroundColor: isSelected ? Colors.white : Colors.black,
-        elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-      ),
-      child: Column(
-        children: [
-          Text(
-            DateFormat.E().format(date),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : Colors.black,
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      child: OutlinedButton(
+        onPressed: () => provider.updateSelectedDate(date),
+        style: OutlinedButton.styleFrom(
+          backgroundColor: isSelected ? Colors.deepPurple : Colors.grey[100],
+          foregroundColor: isSelected ? Colors.white : Colors.black87,
+          side: BorderSide(
+            color: isSelected ? Colors.deepPurple : Colors.grey[300]!,
           ),
-          const SizedBox(height: 4),
-          Text(
-            date.day.toString(),
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: isSelected ? Colors.white : Colors.black,
-            ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          const SizedBox(height: 4),
-          Text(
-            '✅$done/📌$total',
-            style: TextStyle(
-              fontSize: 10,
-              color: isSelected ? Colors.white : Colors.grey[700],
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        ),
+        child: Column(
+          children: [
+            Text(
+              DateFormat.E().format(date),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text('${date.day}', style: const TextStyle(fontSize: 14)),
+            const SizedBox(height: 2),
+            Text('✅$done/📌$total', style: const TextStyle(fontSize: 10)),
+          ],
+        ),
       ),
     );
   }
+
+  // Widget _buildWeekDayButton(TaskProvider provider, DateTime date) {
+  //   final isSelected = DateUtils.isSameDay(date, provider.selectedDate);
+  //   final stats = provider.getTaskStatsForDate(date);
+  //   final done = stats['done'] ?? 0;
+  //   final total = stats['total'] ?? 0;
+
+  //   return ElevatedButton(
+  //     onPressed: () => provider.updateSelectedDate(date),
+  //     style: ElevatedButton.styleFrom(
+  //       backgroundColor: isSelected ? Colors.deepPurple : Colors.white,
+  //       foregroundColor: isSelected ? Colors.white : Colors.black,
+  //       elevation: 0,
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  //       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Text(
+  //           DateFormat.E().format(date),
+  //           style: TextStyle(
+  //             fontWeight: FontWeight.bold,
+  //             color: isSelected ? Colors.white : Colors.black,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 4),
+  //         Text(
+  //           date.day.toString(),
+  //           style: TextStyle(
+  //             fontSize: 16,
+  //             fontWeight: FontWeight.w600,
+  //             color: isSelected ? Colors.white : Colors.black,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 4),
+  //         Text(
+  //           '✅$done/📌$total',
+  //           style: TextStyle(
+  //             fontSize: 10,
+  //             color: isSelected ? Colors.white : Colors.grey[700],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -152,13 +235,57 @@ class _WeeklyCalendarState extends State<WeeklyCalendar> {
       children: [
         _buildNavigationButtons(provider),
         const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children:
-              _weekDates.map((d) => _buildWeekDayButton(provider, d)).toList(),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final isNarrow = constraints.maxWidth < 400;
+            final buttons =
+                _weekDates
+                    .map((d) => _buildWeekDayButton(provider, d))
+                    .toList();
+
+            if (isNarrow) {
+              return Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                alignment: WrapAlignment.center,
+                children: buttons,
+              );
+            } else {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: buttons,
+              );
+            }
+          },
         ),
         const SizedBox(height: 16),
       ],
     );
   }
 }
+//   @override
+//   Widget build(BuildContext context) {
+//     final provider = Provider.of<TaskProvider>(context);
+
+//     return Column(
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         _buildNavigationButtons(provider),
+//         const SizedBox(height: 16),
+//         Wrap(
+//           alignment: WrapAlignment.center,
+//           spacing: 4,
+//           runSpacing: 8,
+//           children:
+//               _weekDates.map((d) => _buildWeekDayButton(provider, d)).toList(),
+//         ),
+//         // Row(
+//         //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         //   children:
+//         //       _weekDates.map((d) => _buildWeekDayButton(provider, d)).toList(),
+//         // ),
+//         const SizedBox(height: 16),
+//       ],
+//     );
+//   }
+// }

@@ -24,38 +24,56 @@ class _GoalInputSectionState extends State<GoalInputSection> {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '🎯 새 목표(Goal) 추가',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        const Padding(
+          padding: EdgeInsets.only(left: 16, bottom: 4),
+          child: Text(
+            '🎯 새 목표 추가',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
         ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _goalController,
-                decoration: const InputDecoration(
-                  hintText: 'Enter a new goal...',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                ),
+        ListTile(
+          contentPadding: const EdgeInsets.only(left: 16, right: 8),
+          title: TextField(
+            controller: _goalController,
+            decoration: InputDecoration(
+              hintText: '목표를 입력하세요...',
+              hintStyle: TextStyle(color: Colors.grey[500]),
+              border: InputBorder.none,
+              isDense: true,
+            ),
+            style: const TextStyle(fontSize: 16),
+            onSubmitted: (text) {
+              final goal = text.trim();
+              if (goal.isNotEmpty) {
+                taskProvider.addGoal(goal);
+                _goalController.clear();
+              }
+            },
+          ),
+          trailing: OutlinedButton(
+            onPressed: () {
+              final goal = _goalController.text.trim();
+              if (goal.isNotEmpty) {
+                taskProvider.addGoal(goal);
+                _goalController.clear();
+              }
+            },
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: Colors.grey[400]!),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             ),
-            const SizedBox(width: 8),
-            ElevatedButton(
-              onPressed: () {
-                final goal = _goalController.text.trim();
-                if (goal.isNotEmpty) {
-                  taskProvider.addGoal(goal);
-                  _goalController.clear();
-                }
-              },
-              child: const Text('추가'),
+            child: const Text(
+              '추가',
+              style: TextStyle(fontSize: 14, color: Colors.black87),
             ),
-          ],
+          ),
         ),
-        const SizedBox(height: 20),
+        const Divider(thickness: 1),
       ],
     );
   }

@@ -5,17 +5,19 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(width: 10),
-        CircleAvatar(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 300;
+
+        final avatar = const CircleAvatar(
           radius: 30,
           backgroundImage: AssetImage('assets/kingbob.webp'),
-        ),
-        const SizedBox(width: 15),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        );
+
+        final textColumn = Column(
+          crossAxisAlignment:
+              isNarrow ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+          children: const [
             Text(
               "지선",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -25,8 +27,24 @@ class UserInfo extends StatelessWidget {
               style: TextStyle(fontSize: 15, color: Colors.grey),
             ),
           ],
-        ),
-      ],
+        );
+
+        if (isNarrow) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [avatar, const SizedBox(height: 12), textColumn],
+          );
+        } else {
+          return Row(
+            children: [
+              const SizedBox(width: 10),
+              avatar,
+              const SizedBox(width: 15),
+              textColumn,
+            ],
+          );
+        }
+      },
     );
   }
 }
